@@ -35,7 +35,9 @@ import javax.management.ObjectName;
 import javax.servlet.http.HttpUpgradeHandler;
 import javax.servlet.http.WebConnection;
 
+import org.apache.coyote.ajp.AjpAprProtocol;
 import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.InstanceManager;
 import org.apache.tomcat.util.ExceptionUtils;
 import org.apache.tomcat.util.collections.SynchronizedStack;
@@ -49,6 +51,8 @@ import org.apache.tomcat.util.res.StringManager;
 
 public abstract class AbstractProtocol<S> implements ProtocolHandler,
         MBeanRegistration {
+
+    private static final Log log = LogFactory.getLog(AbstractProtocol.class);
 
     /**
      * The string manager for this package.
@@ -145,6 +149,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
     protected int processorCache = 200;
     public int getProcessorCache() { return this.processorCache; }
     public void setProcessorCache(int processorCache) {
+        log.info("setProcessorCache=" + processorCache);
         this.processorCache = processorCache;
     }
 
@@ -900,8 +905,10 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
         @SuppressWarnings("sync-override") // Size may exceed cache size a bit
         @Override
         public boolean push(Processor<S> processor) {
+            log.info("AbstractProtocol.push(processor)");
             int cacheSize = handler.getProtocol().getProcessorCache();
             boolean offer = cacheSize == -1 ? true : size.get() < cacheSize;
+            log.info("offer=" + offer);
             //avoid over growing our cache or add after we have stopped
             boolean result = false;
             if (offer) {
@@ -910,7 +917,10 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                     size.incrementAndGet();
                 }
             }
-            if (!result) handler.unregister(processor);
+            if (!result) {
+                log.info("do unregister");
+                handler.unregister(processor);
+            }
             return result;
         }
 

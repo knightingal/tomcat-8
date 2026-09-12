@@ -46,34 +46,16 @@ public class ProcessorResearchServlet extends HttpServlet {
 
         out.println("ProcessorResearchServlet");
 
-//        out.println("<!DOCTYPE html><html>");
-//        out.println("<head>");
-//        out.println("<meta charset=\"UTF-8\" />");
-//
-//        String title = rb.getString("helloworld.title");
-//
-//        out.println("<title>" + title + "</title>");
-//        out.println("</head>");
-//        out.println("<body bgcolor=\"white\">");
-//
-//        // note that all links are created to be relative. this
-//        // ensures that we can move the web application that this
-//        // servlet belongs to to a different place in the url
-//        // tree and not have any harmful side effects.
-//
-//        // XXX
-//        // making these absolute till we work out the
-//        // addition of a PathInfo issue
-//
-//        out.println("<a href=\"../helloworld.html\">");
-//        out.println("<img src=\"../images/code.gif\" height=24 " +
-//                    "width=24 align=right border=0 alt=\"view code\"></a>");
-//        out.println("<a href=\"../index.html\">");
-//        out.println("<img src=\"../images/return.gif\" height=24 " +
-//                    "width=24 align=right border=0 alt=\"return\"></a>");
-//        out.println("<h1>" + title + "</h1>");
-//        out.println("</body>");
-//        out.println("</html>");
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request,
+                       HttpServletResponse response)
+            throws IOException, ServletException
+    {
+
+        PrintWriter out = response.getWriter();
+        out.println("ProcessorResearchServlet");
     }
 }
 
