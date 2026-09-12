@@ -15,11 +15,18 @@
 * limitations under the License.
 */
 
+import org.apache.coyote.AbstractProtocol;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ResourceBundle;
 
@@ -47,6 +54,7 @@ public class ProcessorResearchServlet extends HttpServlet {
         out.println("ProcessorResearchServlet");
 
     }
+    private static final Log log = LogFactory.getLog(ProcessorResearchServlet.class);
 
     @Override
     public void doPost(HttpServletRequest request,
@@ -54,8 +62,56 @@ public class ProcessorResearchServlet extends HttpServlet {
             throws IOException, ServletException
     {
 
-        PrintWriter out = response.getWriter();
-        out.println("ProcessorResearchServlet");
+        response.setStatus(200);
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+        response.flushBuffer();
+
+        String isUpFlow = request.getHeader("upflow");
+
+        if (isUpFlow == null) {
+            doEchoService(request, response);
+            return;
+        }
+
+
+        String deviceId = request.getHeader("deviceid");
+        response.setHeader("content-length", "100000");
+        OutputStream outputStream = response.getOutputStream();
+        InputStream inputStream = request.getInputStream();
+        if (isUpFlow.equals("true")) {
+            log.info("is up flow");
+            outputStream = NpSession.bindSession(deviceId).getOutputStream();
+            byte[] buffer = new byte[1024];
+            while (true) {
+                int bytesRead = inputStream.read(buffer);
+                if (bytesRead == -1) {
+                    break;
+                }
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+        } else {
+            log.info("is down flow");
+            NpSession.createSession(deviceId, outputStream);
+        }
+
+    }
+
+    private void doEchoService(HttpServletRequest request,
+                               HttpServletResponse response) throws IOException, ServletException {
+        log.info("Echo service called");
+        OutputStream outputStream = response.getOutputStream();
+        InputStream inputStream = request.getInputStream();
+        while (true) {
+            byte[] buffer = new byte[10];
+            int bytesRead = inputStream.read(buffer);
+            if (bytesRead == -1) {
+                break;
+            }
+            outputStream.write(buffer, 0, bytesRead);
+            outputStream.flush();
+        }
     }
 }
 
