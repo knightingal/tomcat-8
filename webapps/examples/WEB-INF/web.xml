@@ -143,6 +143,10 @@
         <servlet-class>ProcessorResearchServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ProcessorCommonServlet</servlet-name>
+        <servlet-class>ProcessorCommonServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>RequestInfoExample</servlet-name>
         <servlet-class>RequestInfoExample</servlet-class>
     </servlet>
@@ -178,6 +182,10 @@
     <servlet-mapping>
         <servlet-name>ProcessorResearchServlet</servlet-name>
         <url-pattern>/servlets/servlet/ProcessorResearchServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProcessorCommonServlet</servlet-name>
+        <url-pattern>/servlets/servlet/ProcessorCommonServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RequestInfoExample</servlet-name>
