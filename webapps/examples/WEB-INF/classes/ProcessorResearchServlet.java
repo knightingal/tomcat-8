@@ -83,18 +83,24 @@ public class ProcessorResearchServlet extends HttpServlet {
             log.info("is up flow");
             outputStream = NpSession.bindSession(deviceId).getOutputStream();
             byte[] buffer = new byte[1024];
-            while (true) {
-                int bytesRead = inputStream.read(buffer);
-                if (bytesRead == -1) {
-                    break;
+            try {
+                while (true) {
+                    int bytesRead = inputStream.read(buffer);
+                    log.info("read " + bytesRead + " bytes from upflow");
+                    if (bytesRead == -1) {
+                        break;
+                    }
+                    outputStream.write(buffer, 0, bytesRead);
+                    outputStream.flush();
                 }
-                outputStream.write(buffer, 0, bytesRead);
-                outputStream.flush();
+            } catch (Exception e) {
+                log.error("", e);
             }
 
         } else {
             log.info("is down flow");
             NpSession.createSession(deviceId, outputStream);
+            log.info("downflow servlet return", new Exception("downflow servlet return"));
         }
 
     }

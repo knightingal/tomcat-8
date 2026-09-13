@@ -1538,6 +1538,7 @@ public class NioEndpoint extends AbstractEndpoint<NioChannel> {
                     } else {
                         state = handler.process(ka, status);
                     }
+                    log.info("one process return");
                     if (state == SocketState.CLOSED) {
                         close(socket, key, SocketStatus.ERROR);
                     }
@@ -1568,10 +1569,12 @@ public class NioEndpoint extends AbstractEndpoint<NioChannel> {
                 log.error("", t);
                 socket.getPoller().cancelledKey(key,SocketStatus.ERROR);
             } finally {
+                log.info("do finally block");
                 ka = null;
                 status = null;
                 //return to cache
                 if (running && !paused) {
+                    log.info("do push processorCache");
                     processorCache.push(this);
                 }
             }
