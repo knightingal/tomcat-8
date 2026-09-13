@@ -39,24 +39,10 @@ public class ProcessorCommonServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    @Override
-    public void doGet(HttpServletRequest request,
-                      HttpServletResponse response)
-        throws IOException, ServletException
-    {
-        ResourceBundle rb =
-            ResourceBundle.getBundle("LocalStrings",request.getLocale());
-        response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-
-        out.println("ProcessorResearchServlet");
-
-    }
     private static final Log log = LogFactory.getLog(ProcessorCommonServlet.class);
 
     @Override
-    public void doPost(HttpServletRequest request,
+    public void doGet(HttpServletRequest request,
                        HttpServletResponse response)
             throws IOException, ServletException
     {
