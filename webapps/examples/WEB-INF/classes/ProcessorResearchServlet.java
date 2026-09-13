@@ -89,6 +89,7 @@ public class ProcessorResearchServlet extends HttpServlet {
                     break;
                 }
                 outputStream.write(buffer, 0, bytesRead);
+                outputStream.flush();
             }
 
         } else {
